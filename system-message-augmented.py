@@ -58,11 +58,8 @@ class Filter:
             (message for message in messages if message.get("role") == "system"),
             None,
         )
-        if system_prompt:
-            template = system_prompt["content"]
-        else:
-            # print("No system message.  Using fallback.")
-            template = self.valves.system_message
+
+        template = self.valves.system_message
 
         # Get the current date
         current_date = datetime.now()
@@ -98,10 +95,9 @@ class Filter:
         )
 
         if system_prompt:
-            system_prompt["content"] = template
+            system_prompt["content"] += "\ n\n " + template
         else:
             system_prompt = {"role": "system", "content": template}
-
         filtered_messages = []
         filtered_messages = [system_prompt] + [
             message for message in messages if message["role"] != "system"
